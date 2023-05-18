@@ -26,7 +26,7 @@ fi
 NGROK_REMOTE_URL=$(echo ${NGROK_REMOTE_URL} | tr -d '"')
 
 WEBHOOK_URL=$NGROK_REMOTE_URL/telegram-update
-STATUSCODE=$(curl --silent --output /dev/null --write-out "%{http_code}" https://api.telegram.org/bot$TELEGRAM_API_KEY/setWebhook?url=$WEBHOOK_URL)
+STATUSCODE=$(curl --output /dev/null --write-out "%{http_code}" https://api.telegram.org/bot$TELEGRAM_API_KEY/setWebhook?url=$WEBHOOK_URL)
 
 if test $STATUSCODE -ne 200; then
   echo "ERROR: cannot set webhook: status code: $STATUSCODE"
