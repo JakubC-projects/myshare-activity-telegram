@@ -20,19 +20,15 @@ func SendWelcomeMessage(user models.User) (tgbotapi.Message, error) {
 	return sendMessageWithMarkup(user.ChatId, text, buttons)
 }
 
-func SendLoggedInMessage(user models.User) (tgbotapi.Message, error) {
+func SendLoggedInMessage(user models.User, teams []models.Team) (tgbotapi.Message, error) {
 	text := fmt.Sprintf("Successfully logged in as %s\nSelect your team:", user.DisplayName)
-	return Bot.Send(tgbotapi.NewEditMessageText(user.ChatId, user.LastMessageId, text))
+	buttons := tgbotapi.InlineKeyboardMarkup{
+		InlineKeyboard: lo.Map(teams, func(t models.Team, _ int) []tgbotapi.InlineKeyboardButton {
+			return []tgbotapi.InlineKeyboardButton{{Text: t.Name, CallbackData: lo.ToPtr(fmt.Sprint(t.TeamId))}}
+		}),
+	}
+	return Bot.Send(tgbotapi.NewEditMessageTextAndMarkup(user.ChatId, user.LastMessageId, text, buttons))
 }
-
-// func sendMessage(chatId int64, text string) (tgbotapi.Message, error) {
-// 	return Bot.Send(tgbotapi.MessageConfig{
-// 		BaseChat: tgbotapi.BaseChat{
-// 			ChatID: chatId,
-// 		},
-// 		Text: text,
-// 	})
-// }
 
 func sendMessageWithMarkup(chatId int64, text string, replyMarkup tgbotapi.InlineKeyboardMarkup) (tgbotapi.Message, error) {
 	return Bot.Send(tgbotapi.MessageConfig{
