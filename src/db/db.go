@@ -16,7 +16,7 @@ var Users *firestore.CollectionRef
 
 func init() {
 	ctx := context.Background()
-	conf := &firebase.Config{ProjectID: "test"}
+	conf := &firebase.Config{ProjectID: "myshare-telegram-notifications"}
 	app, err := firebase.NewApp(ctx, conf)
 	if err != nil {
 		panic(fmt.Errorf("cannot create firebase app: %w", err))
