@@ -18,7 +18,7 @@ func SendWelcomeMessage(user models.User, opts ...Option) (tgbotapi.Message, err
 
 	loginUrl := fmt.Sprintf("%s/login?chatId=%d", config.Get().Server.Host, user.ChatId)
 
-	if strings.HasPrefix("https", loginUrl) {
+	if strings.HasPrefix(loginUrl, "https") {
 		buttons = tgbotapi.InlineKeyboardMarkup{
 			InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
 				{{Text: "Login", URL: &loginUrl}},
