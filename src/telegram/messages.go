@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/JakubC-projects/myshare-activity-telegram/src/config"
 	"github.com/JakubC-projects/myshare-activity-telegram/src/models"
@@ -12,10 +13,21 @@ import (
 func SendWelcomeMessage(user models.User, opts ...Option) (tgbotapi.Message, error) {
 	text := "Welcome to the unofficial MyShare bot\nTo start you need to login below"
 	buttons := tgbotapi.InlineKeyboardMarkup{
-		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
-			{{Text: "Login", URL: lo.ToPtr(fmt.Sprintf("%s/login?chatId=%d", config.Get().Server.Host, user.ChatId))}},
-		},
+		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{},
 	}
+
+	loginUrl := fmt.Sprintf("%s/login?chatId=%d", config.Get().Server.Host, user.ChatId)
+
+	if strings.HasPrefix("https", loginUrl) {
+		buttons = tgbotapi.InlineKeyboardMarkup{
+			InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
+				{{Text: "Login", URL: &loginUrl}},
+			},
+		}
+	} else {
+		text += "\nLogin url: " + loginUrl
+	}
+
 	if isEdit(opts) {
 		return Bot.Send(tgbotapi.NewEditMessageTextAndMarkup(user.ChatId, user.LastMessageId, text, buttons))
 	}
@@ -41,7 +53,7 @@ func SendMenuMessage(user models.User, opts ...Option) (tgbotapi.Message, error)
 		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
 			{{Text: "Show activities", CallbackData: lo.ToPtr("activities")}},
 			{{Text: "Change team", CallbackData: lo.ToPtr("changeTeam")}},
-			{{Text: "Logout", URL: lo.ToPtr(fmt.Sprintf("%s/logout?chatId=%d", config.Get().Server.Host, user.ChatId))}},
+			// {{Text: "Logout", URL: lo.ToPtr(fmt.Sprintf("%s/logout?chatId=%d", config.Get().Server.Host, user.ChatId))}},
 		},
 	}
 	if isEdit(opts) {

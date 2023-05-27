@@ -1,0 +1,31 @@
+version: "3.4"
+
+services:
+  myshare_notifications:
+    container_name: myshare_notifications
+    build:
+      context: ./
+      dockerfile: ./dev.Dockerfile
+    entrypoint: ["air"]
+    ports:
+      - "3030:3030"
+    volumes:
+      - ~/.cache/go-build:/root/.cache/go-build
+      - ./src:/app/src
+    env_file: .env
+    environment:
+      PORT: 3030
+      SERVER_HOST: http://localhost:3030
+      FIRESTORE_EMULATOR_HOST: firebase:8080
+
+  firebase:
+    container_name: firebase
+    image: spine3/firebase-emulator
+    ports:
+      - "4000:4000"
+      - "8080:8080"
+      - "41339:41339"
+    environment:
+      FIRESTORE_EMULATOR_PORT: 8080
+      UI_EMULATOR_PORT: 4000
+      GCP_PROJECT: myshare-notifications-local

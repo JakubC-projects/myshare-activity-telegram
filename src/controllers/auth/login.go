@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/JakubC-projects/myshare-activity-telegram/src/auth"
+	"github.com/JakubC-projects/myshare-activity-telegram/src/log"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -19,7 +20,9 @@ type queryParams struct {
 func loginHandler(ctx *gin.Context) {
 	state, err := generateRandomState()
 	if err != nil {
-		ctx.String(http.StatusInternalServerError, err.Error())
+		errCtx := fmt.Errorf("cannot generate random state: %w", err)
+		log.L.Err(err).Send()
+		ctx.String(http.StatusInternalServerError, errCtx.Error())
 		return
 	}
 
@@ -27,12 +30,12 @@ func loginHandler(ctx *gin.Context) {
 
 	err = ctx.BindQuery(&qParams)
 	if err != nil {
-		errMsg := fmt.Sprintf("invalid query parameters: %s", err.Error())
-		ctx.String(http.StatusBadRequest, errMsg)
+		errCtx := fmt.Errorf("invalid query parameters: %w", err)
+		log.L.Err(err).Send()
+
+		ctx.String(http.StatusBadRequest, errCtx.Error())
 		return
 	}
-
-	fmt.Println("params", qParams)
 
 	// Save the state inside the session.
 	session := sessions.Default(ctx)
@@ -40,7 +43,10 @@ func loginHandler(ctx *gin.Context) {
 	session.Set("chatId", qParams.ChatId)
 
 	if err := session.Save(); err != nil {
-		ctx.String(http.StatusInternalServerError, err.Error())
+		errCtx := fmt.Errorf("cannot save session: %w", err)
+		log.L.Err(err).Send()
+
+		ctx.String(http.StatusInternalServerError, errCtx.Error())
 		return
 	}
 

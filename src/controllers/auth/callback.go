@@ -42,7 +42,7 @@ func callbackHandler(c *gin.Context) {
 		c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	telegram.SendLoggedInMessage(loggedInUser, teams)
+	telegram.SendLoggedInMessage(loggedInUser, teams, telegram.Edit)
 
 	// Redirect to logged in page.
 	c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("https://t.me/%s", config.Get().Telegram.BotName))

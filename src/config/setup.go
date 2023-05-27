@@ -1,9 +1,7 @@
 package config
 
 import (
-	"fmt"
-	"os"
-
+	"github.com/JakubC-projects/myshare-activity-telegram/src/log"
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -17,14 +15,9 @@ func Get() Config {
 	return cfg
 }
 
-func processError(err error) {
-	fmt.Println(err)
-	os.Exit(2)
-}
-
 func readEnv(cfg *Config) {
 	err := envconfig.Process("", cfg)
 	if err != nil {
-		processError(err)
+		log.L.Fatal().AnErr("err", err).Msg("Cannot read env")
 	}
 }

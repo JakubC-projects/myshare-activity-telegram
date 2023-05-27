@@ -10,7 +10,7 @@ type editMessage struct{}
 
 func (editMessage) IsOption() {}
 
-var Edit editMessage
+var Edit = editMessage{}
 
 func isEdit(opts []Option) bool {
 	_, foundEdit := lo.Find(opts, func(p Option) bool {

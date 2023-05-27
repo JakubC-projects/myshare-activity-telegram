@@ -6,6 +6,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
+	"github.com/JakubC-projects/myshare-activity-telegram/src/config"
 	_ "google.golang.org/api/option"
 )
 
@@ -16,7 +17,7 @@ var Users *firestore.CollectionRef
 
 func init() {
 	ctx := context.Background()
-	conf := &firebase.Config{ProjectID: "myshare-telegram-notifications"}
+	conf := &firebase.Config{ProjectID: config.Get().Server.GcpProject}
 	app, err := firebase.NewApp(ctx, conf)
 	if err != nil {
 		panic(fmt.Errorf("cannot create firebase app: %w", err))
