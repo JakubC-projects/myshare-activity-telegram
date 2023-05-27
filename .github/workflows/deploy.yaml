@@ -47,5 +47,5 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v0
         with:
           service: ${{ env.CLOUD_RUN_NAME }}
-          tags: ${{env.IMAGE_URL}}:${{ github.sha }}
+          image: ${{env.IMAGE_URL}}:${{ github.sha }}
           region: ${{ env.CLOUD_RUN_REGION }}
