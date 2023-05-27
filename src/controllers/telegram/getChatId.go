@@ -11,5 +11,9 @@ func getChatIdFromUpdate(u tgbotapi.Update) (int64, error) {
 		return u.Message.Chat.ID, nil
 	}
 
+	if u.CallbackQuery != nil && u.CallbackQuery.Message != nil && u.CallbackQuery.Message.Chat != nil {
+		return u.CallbackQuery.Message.Chat.ID, nil
+	}
+
 	return 0, errors.New("cannot read chat id")
 }
