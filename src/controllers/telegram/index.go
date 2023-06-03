@@ -43,8 +43,7 @@ func HandleUpdate(ctx context.Context, u tgbotapi.Update) error {
 	}
 
 	if user.Token == nil {
-		handleWelcomeMessage(ctx, user)
-		return nil
+		return handleWelcomeMessage(ctx, user)
 	}
 
 	if user.Team == nil && u.CallbackQuery != nil {

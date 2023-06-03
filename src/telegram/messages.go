@@ -2,7 +2,6 @@ package telegram
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/JakubC-projects/myshare-activity-telegram/src/config"
 	"github.com/JakubC-projects/myshare-activity-telegram/src/models"
@@ -12,20 +11,12 @@ import (
 
 func SendWelcomeMessage(user models.User, opts ...Option) (tgbotapi.Message, error) {
 	text := "Welcome to the unofficial MyShare bot\nTo start you need to login below"
-	buttons := tgbotapi.InlineKeyboardMarkup{
-		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{},
-	}
 
 	loginUrl := fmt.Sprintf("%s/login?chatId=%d", config.Get().Server.Host, user.ChatId)
-
-	if strings.HasPrefix(loginUrl, "https") {
-		buttons = tgbotapi.InlineKeyboardMarkup{
-			InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
-				{{Text: "Login", URL: &loginUrl}},
-			},
-		}
-	} else {
-		text += "\nLogin url: " + loginUrl
+	buttons := tgbotapi.InlineKeyboardMarkup{
+		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
+			{{Text: "Login", WebApp: &tgbotapi.WebAppInfo{URL: loginUrl}}},
+		},
 	}
 
 	if isEdit(opts) {
@@ -53,7 +44,7 @@ func SendMenuMessage(user models.User, opts ...Option) (tgbotapi.Message, error)
 		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
 			{{Text: "Show activities", CallbackData: lo.ToPtr("activities")}},
 			{{Text: "Change team", CallbackData: lo.ToPtr("changeTeam")}},
-			// {{Text: "Logout", URL: lo.ToPtr(fmt.Sprintf("%s/logout?chatId=%d", config.Get().Server.Host, user.ChatId))}},
+			{{Text: "Logout", WebApp: &tgbotapi.WebAppInfo{URL: fmt.Sprintf("%s/logout?chatId=%d", config.Get().Server.Host, user.ChatId)}}},
 		},
 	}
 	if isEdit(opts) {

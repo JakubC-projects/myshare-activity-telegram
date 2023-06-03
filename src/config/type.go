@@ -2,9 +2,11 @@ package config
 
 type Config struct {
 	Server struct {
-		Port       int    `envconfig:"PORT"`
-		Host       string `envconfig:"SERVER_HOST"`
-		GcpProject string `envconfig:"GCP_PROJECT"`
+		Port        int    `envconfig:"PORT"`
+		Host        string `envconfig:"SERVER_HOST"`
+		GcpProject  string `envconfig:"GCP_PROJECT"`
+		CertFile    string `envconfig:"CERT_FILE"`
+		CertKeyFile string `envconfig:"CERT_KEY_FILE"`
 	}
 	Telegram struct {
 		ApiKey  string `envconfig:"TELEGRAM_API_KEY"`

@@ -19,4 +19,5 @@ func AddRoutes(router *gin.Engine) {
 
 	router.GET("/login", loginHandler)
 	router.GET("/callback", callbackHandler)
+	router.GET("/logout", logoutHandler)
 }

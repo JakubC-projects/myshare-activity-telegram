@@ -12,10 +12,11 @@ services:
     volumes:
       - ~/.cache/go-build:/root/.cache/go-build
       - ./src:/app/src
+      - ./certs:/certs
     env_file: .env
     environment:
       PORT: 3030
-      SERVER_HOST: http://localhost:3030
+      SERVER_HOST: https://myshare-telegram.dev:3030
       FIRESTORE_EMULATOR_HOST: firebase:8080
 
   firebase:

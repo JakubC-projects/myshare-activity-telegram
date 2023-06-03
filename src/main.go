@@ -28,7 +28,13 @@ func main() {
 		go http.Serve(tun, r)
 	}
 
-	if err := http.ListenAndServe(fmt.Sprintf(":%d", config.Get().Server.Port), r); err != nil {
-		log.L.Fatal().AnErr("err", err).Send()
+	if config.Get().Server.CertFile != "" {
+		err := r.RunTLS(fmt.Sprintf(":%d", config.Get().Server.Port), config.Get().Server.CertFile, config.Get().Server.CertKeyFile)
+		if err != nil {
+			log.L.Fatal().AnErr("err", err).Send()
+		}
+	} else {
+		r.Run(fmt.Sprintf(":%d", config.Get().Server.Port))
 	}
+
 }
