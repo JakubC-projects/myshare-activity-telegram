@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/JakubC-projects/myshare-activity-telegram/src/config"
 	"github.com/JakubC-projects/myshare-activity-telegram/src/models"
@@ -25,11 +26,12 @@ func SendWelcomeMessage(user models.User, opts ...Option) (tgbotapi.Message, err
 	return sendMessageWithMarkup(user.ChatId, text, buttons)
 }
 
-func SendLoggedInMessage(user models.User, teams []models.Team, opts ...Option) (tgbotapi.Message, error) {
-	text := fmt.Sprintf("Successfully logged in as %s\nSelect your team:", user.DisplayName)
+func SendLoggedInMessage(user models.User, orgs []models.Org, opts ...Option) (tgbotapi.Message, error) {
+	text := fmt.Sprintf("Successfully logged in as %s\nSelect your org:", user.DisplayName)
 	buttons := tgbotapi.InlineKeyboardMarkup{
-		InlineKeyboard: lo.Map(teams, func(t models.Team, _ int) []tgbotapi.InlineKeyboardButton {
-			return []tgbotapi.InlineKeyboardButton{{Text: t.Name, CallbackData: lo.ToPtr(fmt.Sprint(t.TeamId))}}
+		InlineKeyboard: lo.Map(orgs, func(t models.Org, _ int) []tgbotapi.InlineKeyboardButton {
+			callback := fmt.Sprintf("%s-%d", models.CommandChangeOrg, t.Id)
+			return []tgbotapi.InlineKeyboardButton{{Text: t.Name, CallbackData: &callback}}
 		}),
 	}
 	if isEdit(opts) {
@@ -38,13 +40,47 @@ func SendLoggedInMessage(user models.User, teams []models.Team, opts ...Option) 
 	return sendMessageWithMarkup(user.ChatId, text, buttons)
 }
 
+func SendChangeOrgMessage(user models.User, orgs []models.Org, opts ...Option) (tgbotapi.Message, error) {
+	text := "Change your org:"
+	buttons := tgbotapi.InlineKeyboardMarkup{
+		InlineKeyboard: lo.Map(orgs, func(t models.Org, _ int) []tgbotapi.InlineKeyboardButton {
+			callback := fmt.Sprintf("%s-%d", models.CommandChangeOrg, t.Id)
+			return []tgbotapi.InlineKeyboardButton{{Text: t.Name, CallbackData: &callback}}
+		}),
+	}
+	buttons.InlineKeyboard = append(buttons.InlineKeyboard, []tgbotapi.InlineKeyboardButton{{Text: "Back to menu", CallbackData: &models.CommandShowMenu}})
+	if isEdit(opts) {
+		return Bot.Send(tgbotapi.NewEditMessageTextAndMarkup(user.ChatId, user.LastMessageId, text, buttons))
+	}
+	return sendMessageWithMarkup(user.ChatId, text, buttons)
+}
+
+func SendShowActivitiesMessage(user models.User, activities []models.Activity, opts ...Option) (tgbotapi.Message, error) {
+	text := fmt.Sprintf("Available activities (refreshed at %s):", time.Now().Format("2006-01-02 15:04:05"))
+	buttons := tgbotapi.InlineKeyboardMarkup{
+		InlineKeyboard: lo.Map(activities, func(a models.Activity, _ int) []tgbotapi.InlineKeyboardButton {
+			text := fmt.Sprintf("%s %s %d/%d", a.Name, a.Start.Format("2006-01-02 15:04:05"), a.Registrations, a.NeededRegistrations)
+			callback := fmt.Sprintf("%s-%d", models.CommandShowActivity, a.ActivityId)
+			return []tgbotapi.InlineKeyboardButton{{Text: text, CallbackData: &callback}}
+		}),
+	}
+	buttons.InlineKeyboard = append(buttons.InlineKeyboard, []tgbotapi.InlineKeyboardButton{
+		{Text: "Back to menu", CallbackData: &models.CommandShowMenu},
+		{Text: "Refresh", CallbackData: &models.CommandShowActivities},
+	})
+	if isEdit(opts) {
+		return Bot.Send(tgbotapi.NewEditMessageTextAndMarkup(user.ChatId, user.LastMessageId, text, buttons))
+	}
+	return sendMessageWithMarkup(user.ChatId, text, buttons)
+}
+
 func SendMenuMessage(user models.User, opts ...Option) (tgbotapi.Message, error) {
-	text := fmt.Sprintf("Logged in as %s\nSelected team %s:", user.DisplayName, user.Team.Name)
+	text := fmt.Sprintf("Logged in as %s\nSelected org: %s\nChoose your action:", user.DisplayName, user.Org.Name)
 	buttons := tgbotapi.InlineKeyboardMarkup{
 		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
-			{{Text: "Show activities", CallbackData: lo.ToPtr("activities")}},
-			{{Text: "Change team", CallbackData: lo.ToPtr("changeTeam")}},
-			{{Text: "Logout", WebApp: &tgbotapi.WebAppInfo{URL: fmt.Sprintf("%s/logout?chatId=%d", config.Get().Server.Host, user.ChatId)}}},
+			{{Text: "Show activities", CallbackData: &models.CommandShowActivities}},
+			{{Text: "Change org", CallbackData: &models.CommandStartChangeOrg}},
+			{{Text: "Logout", CallbackData: &models.CommandLogout}},
 		},
 	}
 	if isEdit(opts) {

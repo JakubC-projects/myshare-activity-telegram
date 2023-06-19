@@ -6,6 +6,6 @@ type User struct {
 	ChatId        int64
 	Token         *oauth2.Token
 	DisplayName   string
-	Team          *Team
+	Org           *Org
 	LastMessageId int
 }

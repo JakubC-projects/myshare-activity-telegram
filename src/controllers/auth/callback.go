@@ -37,12 +37,12 @@ func callbackHandler(c *gin.Context) {
 		c.String(http.StatusUnauthorized, err.Error())
 	}
 
-	teams, err := api.GetTeams(ctx, loggedInUser)
+	orgs, err := api.GetOrgs(ctx, loggedInUser)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	telegram.SendLoggedInMessage(loggedInUser, teams, telegram.Edit)
+	telegram.SendLoggedInMessage(loggedInUser, orgs, telegram.Edit)
 
 	// Redirect to logged in page.
 	c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("https://t.me/%s", config.Get().Telegram.BotName))

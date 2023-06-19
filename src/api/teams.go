@@ -6,11 +6,9 @@ import (
 	"github.com/JakubC-projects/myshare-activity-telegram/src/models"
 )
 
-type teamsResponse response[struct {
-	UserGroups []models.Team `json:"userGroups"`
-}]
+type orgsResponse response[[]models.Org]
 
-func GetTeams(ctx context.Context, u models.User) ([]models.Team, error) {
-	res, err := get[teamsResponse](ctx, u, "/Profile/Clubs")
-	return res.Data.UserGroups, err
+func GetOrgs(ctx context.Context, u models.User) ([]models.Org, error) {
+	res, err := get[orgsResponse](ctx, u, "/Profile/Organisations")
+	return res.Data, err
 }
