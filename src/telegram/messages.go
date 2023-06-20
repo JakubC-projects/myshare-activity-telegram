@@ -16,7 +16,7 @@ func SendWelcomeMessage(user models.User, opts ...Option) (tgbotapi.Message, err
 	loginUrl := fmt.Sprintf("%s/login?chatId=%d", config.Get().Server.Host, user.ChatId)
 	buttons := tgbotapi.InlineKeyboardMarkup{
 		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
-			{{Text: "Login", WebApp: &tgbotapi.WebAppInfo{URL: loginUrl}}},
+			{{Text: "Login", URL: &loginUrl}},
 		},
 	}
 
@@ -48,7 +48,7 @@ func SendChangeOrgMessage(user models.User, orgs []models.Org, opts ...Option) (
 			return []tgbotapi.InlineKeyboardButton{{Text: t.Name, CallbackData: &callback}}
 		}),
 	}
-	buttons.InlineKeyboard = append(buttons.InlineKeyboard, []tgbotapi.InlineKeyboardButton{{Text: "Back to menu", CallbackData: &models.CommandShowMenu}})
+	buttons.InlineKeyboard = append(buttons.InlineKeyboard, []tgbotapi.InlineKeyboardButton{{Text: "Go back", CallbackData: &models.CommandShowMenu}})
 	if isEdit(opts) {
 		return Bot.Send(tgbotapi.NewEditMessageTextAndMarkup(user.ChatId, user.LastMessageId, text, buttons))
 	}
@@ -91,8 +91,8 @@ func SendShowActivityMessage(user models.User, activity models.Activity, opts ..
 		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
 			{{Text: "Register", CallbackData: &registerCallback}},
 			{{Text: "Show participants", CallbackData: &showParticipantsCallback}},
-			{{Text: "Go back", CallbackData: &models.CommandShowActivities}},
-			{{Text: "Refresh", CallbackData: &refreshCallback}},
+			{{Text: "Go back", CallbackData: &models.CommandShowActivities},
+				{Text: "Refresh", CallbackData: &refreshCallback}},
 		},
 	}
 
@@ -127,8 +127,8 @@ func SendShowStatusMessage(user models.User, status models.Status, opts ...Optio
 		status.Currency)
 	buttons := tgbotapi.InlineKeyboardMarkup{
 		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
-			{{Text: "Go back", CallbackData: &models.CommandShowMenu}},
-			{{Text: "Refresh", CallbackData: &models.CommandShowStatus}},
+			{{Text: "Go back", CallbackData: &models.CommandShowMenu},
+				{Text: "Refresh", CallbackData: &models.CommandShowStatus}},
 		}}
 	if isEdit(opts) {
 		return Bot.Send(tgbotapi.NewEditMessageTextAndMarkup(user.ChatId, user.LastMessageId, text, buttons))
