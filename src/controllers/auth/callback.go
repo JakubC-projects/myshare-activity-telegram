@@ -91,8 +91,18 @@ func updateUser(ctx context.Context, user models.User, token *oauth2.Token) (mod
 		return user, errors.New("invalid type of name claim ")
 	}
 
+	personId, ok := idTokenClaims.Get("https://login.bcc.no/claims/personId")
+	if !ok {
+		return user, errors.New("cannot find personId claim")
+	}
+	personIdFloat, ok := personId.(float64)
+	if !ok {
+		return user, errors.New("invalid type of personId claim ")
+	}
+
 	user.Token = token
 	user.DisplayName = userNameString
+	user.PersonID = int(personIdFloat)
 
 	if err = db.SaveUser(ctx, user); err != nil {
 		return user, fmt.Errorf("cannot save user: %w", err)

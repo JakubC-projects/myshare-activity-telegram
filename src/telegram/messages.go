@@ -65,9 +65,37 @@ func SendShowActivitiesMessage(user models.User, activities []models.Activity, o
 		}),
 	}
 	buttons.InlineKeyboard = append(buttons.InlineKeyboard, []tgbotapi.InlineKeyboardButton{
-		{Text: "Back to menu", CallbackData: &models.CommandShowMenu},
+		{Text: "Go back", CallbackData: &models.CommandShowMenu},
 		{Text: "Refresh", CallbackData: &models.CommandShowActivities},
 	})
+	if isEdit(opts) {
+		return Bot.Send(tgbotapi.NewEditMessageTextAndMarkup(user.ChatId, user.LastMessageId, text, buttons))
+	}
+	return sendMessageWithMarkup(user.ChatId, text, buttons)
+}
+
+func SendShowActivityMessage(user models.User, activity models.Activity, opts ...Option) (tgbotapi.Message, error) {
+	text := fmt.Sprintf("Name: %s\nDate: %s-%s\nTime: %s-%s\nDescription: %s",
+		activity.Name,
+		activity.Start.Format("02 Jan"),
+		activity.Finish.Format("02 Jan"),
+		activity.Start.Format("15.04"),
+		activity.Finish.Format("15.04"),
+		activity.Description,
+	)
+
+	refreshCallback := fmt.Sprintf("%s-%d", models.CommandShowActivity, activity.ActivityId)
+	showParticipantsCallback := fmt.Sprintf("%s-%d", models.CommandShowParticipants, activity.ActivityId)
+	registerCallback := fmt.Sprintf("%s-%d", models.CommandRegisterActivity, activity.ActivityId)
+	buttons := tgbotapi.InlineKeyboardMarkup{
+		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
+			{{Text: "Register", CallbackData: &registerCallback}},
+			{{Text: "Show participants", CallbackData: &showParticipantsCallback}},
+			{{Text: "Go back", CallbackData: &models.CommandShowActivities}},
+			{{Text: "Refresh", CallbackData: &refreshCallback}},
+		},
+	}
+
 	if isEdit(opts) {
 		return Bot.Send(tgbotapi.NewEditMessageTextAndMarkup(user.ChatId, user.LastMessageId, text, buttons))
 	}
@@ -79,10 +107,29 @@ func SendMenuMessage(user models.User, opts ...Option) (tgbotapi.Message, error)
 	buttons := tgbotapi.InlineKeyboardMarkup{
 		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
 			{{Text: "Show activities", CallbackData: &models.CommandShowActivities}},
+			{{Text: "Show status", CallbackData: &models.CommandShowStatus}},
 			{{Text: "Change org", CallbackData: &models.CommandStartChangeOrg}},
 			{{Text: "Logout", CallbackData: &models.CommandLogout}},
 		},
 	}
+	if isEdit(opts) {
+		return Bot.Send(tgbotapi.NewEditMessageTextAndMarkup(user.ChatId, user.LastMessageId, text, buttons))
+	}
+	return sendMessageWithMarkup(user.ChatId, text, buttons)
+}
+
+func SendShowStatusMessage(user models.User, status models.Status, opts ...Option) (tgbotapi.Message, error) {
+	text := fmt.Sprintf("My status (refreshed at %s)\n%.2f%%\n%.2f / %.2f %s",
+		time.Now().Format("2006-01-02 15:04:05"),
+		status.PercentageValue,
+		status.TransactionsAmount,
+		status.Target,
+		status.Currency)
+	buttons := tgbotapi.InlineKeyboardMarkup{
+		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
+			{{Text: "Go back", CallbackData: &models.CommandShowMenu}},
+			{{Text: "Refresh", CallbackData: &models.CommandShowStatus}},
+		}}
 	if isEdit(opts) {
 		return Bot.Send(tgbotapi.NewEditMessageTextAndMarkup(user.ChatId, user.LastMessageId, text, buttons))
 	}
