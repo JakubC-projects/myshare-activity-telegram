@@ -42,7 +42,7 @@ func GetAuthenticator() (*Authenticator, error) {
 		ClientSecret: config.Get().Oauth.ClientSecret,
 		RedirectURL:  fmt.Sprintf("%s/callback", config.Get().Server.Host),
 		Endpoint:     endpoints,
-		Scopes:       []string{oidc.ScopeOpenID, "profile"},
+		Scopes:       []string{oidc.ScopeOpenID, "profile", "offline_access"},
 	}
 
 	return &Authenticator{
