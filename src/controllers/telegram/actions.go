@@ -21,10 +21,15 @@ func handleUserAction(ctx context.Context, user models.User, u tgbotapi.Update) 
 		case models.CommandChangeOrg:
 			return changeOrg(ctx, user, payload)
 		case models.CommandShowActivities:
-			return showActivities(ctx, user)
+			return showActivities(ctx, user, payload)
 		case models.CommandShowActivity:
 			return showActivity(ctx, user, payload)
-
+		case models.CommandShowParticipants:
+			return showParticipants(ctx, user, payload)
+		case models.CommandRegisterActivity:
+			return registerActivity(ctx, user, payload)
+		case models.CommandUnregisterActivity:
+			return unregisterActivity(ctx, user, payload)
 		case models.CommandShowStatus:
 			return showStatus(ctx, user)
 		case models.CommandShowMenu:

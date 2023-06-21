@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/JakubC-projects/myshare-activity-telegram/src/models"
 )
@@ -9,6 +10,7 @@ import (
 type orgsResponse response[[]models.Org]
 
 func GetOrgs(ctx context.Context, u models.User) ([]models.Org, error) {
-	res, err := get[orgsResponse](ctx, u, "/Profile/Organisations")
+	url := fmt.Sprintf("%s/Profile/Organisations", baseUrl1)
+	res, err := get[orgsResponse](ctx, u, url)
 	return res.Data, err
 }

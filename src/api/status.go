@@ -8,7 +8,7 @@ import (
 )
 
 func GetStatus(ctx context.Context, u models.User) (models.Status, error) {
-	url := fmt.Sprintf("/TargetStatus/%d/Member/%d", u.Org.Id, u.PersonID)
+	url := fmt.Sprintf("%s/TargetStatus/%d/Member/%d", baseUrl1, u.Org.Id, u.PersonID)
 	res, err := get[response[models.Status]](ctx, u, url)
 	return res.Data, err
 }

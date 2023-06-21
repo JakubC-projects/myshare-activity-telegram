@@ -19,7 +19,8 @@ type Config struct {
 		Secret       string `envconfig:"SECRET"`
 	}
 	MyshareAPI struct {
-		BaseUrl  string `envconfig:"MYSHARE_BASE_URL"`
+		BaseUrl1 string `envconfig:"MYSHARE_BASE_URL1"`
+		BaseUrl2 string `envconfig:"MYSHARE_BASE_URL2"`
 		Audience string `envconfig:"MYSHARE_AUDIENCE"`
 	}
 }
