@@ -12,6 +12,7 @@ require (
 	github.com/goccy/go-json v0.10.2
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/lestrrat-go/jwx v1.2.25
+	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/rs/zerolog v1.29.1
 	github.com/samber/lo v1.38.1
 	golang.ngrok.com/ngrok v1.0.0
@@ -62,7 +63,6 @@ require (
 	github.com/lestrrat-go/option v1.0.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
-	github.com/microcosm-cc/bluemonday v1.0.24 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.7 // indirect
