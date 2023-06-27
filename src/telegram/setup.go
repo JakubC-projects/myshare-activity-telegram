@@ -19,7 +19,7 @@ func SendWelcomeMessage(user models.User, opts ...Option) (tgbotapi.Message, err
 		},
 	}
 
-	return sendMessage(user, text, buttons, opts...)
+	return SendMessage(user, text, &buttons, opts...)
 }
 
 func SendLoggedInMessage(user models.User, orgs []models.Org, opts ...Option) (tgbotapi.Message, error) {
@@ -31,7 +31,7 @@ func SendLoggedInMessage(user models.User, orgs []models.Org, opts ...Option) (t
 		}),
 	}
 
-	return sendMessage(user, text, buttons, opts...)
+	return SendMessage(user, text, &buttons, opts...)
 }
 
 func SendChangeOrgMessage(user models.User, orgs []models.Org, opts ...Option) (tgbotapi.Message, error) {
@@ -44,5 +44,5 @@ func SendChangeOrgMessage(user models.User, orgs []models.Org, opts ...Option) (
 	}
 	buttons.InlineKeyboard = append(buttons.InlineKeyboard, []tgbotapi.InlineKeyboardButton{{Text: "Go back", CallbackData: &models.CommandShowMenu}})
 
-	return sendMessage(user, text, buttons, opts...)
+	return SendMessage(user, text, &buttons, opts...)
 }

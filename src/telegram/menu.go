@@ -27,6 +27,6 @@ func SendMenuMessage(user models.User, opts ...Option) (tgbotapi.Message, error)
 	buttons.InlineKeyboard = append(buttons.InlineKeyboard,
 		[]tgbotapi.InlineKeyboardButton{{Text: "Logout", CallbackData: &models.CommandLogout}})
 
-	return sendMessage(user, text, buttons, opts...)
+	return SendMessage(user, text, &buttons, opts...)
 
 }

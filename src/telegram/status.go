@@ -23,5 +23,5 @@ func SendShowStatusMessage(user models.User, status models.Status, opts ...Optio
 				{Text: "Refresh", CallbackData: &models.CommandShowStatus}},
 		}}
 
-	return sendMessage(user, text, buttons, opts...)
+	return SendMessage(user, text, &buttons, opts...)
 }

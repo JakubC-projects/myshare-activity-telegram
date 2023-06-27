@@ -95,7 +95,7 @@ func SendShowActivitiesMessage(user models.User, activities []models.MyshareActi
 	buttons := tgbotapi.InlineKeyboardMarkup{
 		InlineKeyboard: inlineKeyboard,
 	}
-	return sendMessage(user, text, buttons, opts...)
+	return SendMessage(user, text, &buttons, opts...)
 }
 
 var sanitizeHtml = bluemonday.StripTagsPolicy()
@@ -149,7 +149,7 @@ func SendShowActivityMessage(user models.User, activity models.MyshareActivity, 
 
 	buttons := tgbotapi.InlineKeyboardMarkup{InlineKeyboard: inlineButtons}
 
-	return sendMessage(user, text, buttons, opts...)
+	return SendMessage(user, text, &buttons, opts...)
 }
 
 func SendShowShowParticipantsMessage(user models.User, activity models.MyshareActivity, participants []models.Participant, opts ...Option) (tgbotapi.Message, error) {
@@ -177,7 +177,7 @@ func SendShowShowParticipantsMessage(user models.User, activity models.MyshareAc
 		},
 	}
 
-	return sendMessage(user, text, buttons, opts...)
+	return SendMessage(user, text, &buttons, opts...)
 
 }
 
@@ -202,5 +202,5 @@ func SendNewActivitiesNotificationMessage(user models.User, activities []models.
 		{Text: "Back to menu", CallbackData: &models.CommandShowMenu},
 	})
 
-	return sendMessage(user, text, tgbotapi.InlineKeyboardMarkup{InlineKeyboard: buttons}, opts...)
+	return SendMessage(user, text, &tgbotapi.InlineKeyboardMarkup{InlineKeyboard: buttons}, opts...)
 }

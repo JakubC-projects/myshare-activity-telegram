@@ -24,10 +24,17 @@ func isEdit(opts []Option) bool {
 	return foundEdit
 }
 
-func sendMessage(user models.User, text string, replyMarkup tgbotapi.InlineKeyboardMarkup, opts ...Option) (tgbotapi.Message, error) {
+func SendMessage(user models.User, text string, replyMarkup *tgbotapi.InlineKeyboardMarkup, opts ...Option) (tgbotapi.Message, error) {
 	if isEdit(opts) {
-		msg := tgbotapi.NewEditMessageTextAndMarkup(user.ChatId, user.LastMessageId, text, replyMarkup)
-		msg.ParseMode = tgbotapi.ModeHTML
+		msg := tgbotapi.EditMessageTextConfig{
+			BaseEdit: tgbotapi.BaseEdit{
+				ChatID:      user.ChatId,
+				MessageID:   user.LastMessageId,
+				ReplyMarkup: replyMarkup,
+			},
+			Text:      text,
+			ParseMode: tgbotapi.ModeHTML,
+		}
 		return Bot.Send(msg)
 	}
 
