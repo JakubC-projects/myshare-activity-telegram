@@ -52,7 +52,7 @@ func handleActivitiesCheck(ctx context.Context) error {
 }
 
 func getNewActivities(ctx context.Context) ([]models.ContributionsActivity, error) {
-	refreshTime := time.Now().Add(-100 * time.Hour)
+	refreshTime := time.Now().Add(-10 * time.Minute)
 
 	freshActivities, err := apim2m.GetActivities(ctx, apim2m.ActivitiesQueryParams{
 		Filter: &apim2m.ActivitiesFilter{
