@@ -43,7 +43,7 @@ func GetOrCreateUser(ctx context.Context, chatId int64) (models.User, error) {
 	if status.Code(err) != codes.NotFound {
 		return user, fmt.Errorf("error getting user: %w", err)
 	}
-	user = models.User{ChatId: chatId}
+	user = models.User{ChatId: chatId, NotificationsSettings: models.NotificationsSettings{Enabled: true}}
 	err = SaveUser(ctx, user)
 	if err != nil {
 		return user, fmt.Errorf("cannot save user: %w", err)
