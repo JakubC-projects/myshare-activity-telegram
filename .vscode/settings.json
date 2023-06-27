@@ -2,5 +2,6 @@
     "cSpell.words": [
         "firestore",
         "MYSHARE"
-    ]
+    ],
+    "go.testEnvFile": "${workspaceFolder}/.env",
 }

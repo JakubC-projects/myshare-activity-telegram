@@ -19,6 +19,22 @@ func GetUser(ctx context.Context, chatId int64) (models.User, error) {
 	return res, err
 }
 
+func GetUsersToNotify(ctx context.Context, teamId int) ([]models.User, error) {
+	docs, err := Users.Where("Org.TeamId", "==", teamId).Where("NotificationsSettings.Enabled", "==", true).Documents(ctx).GetAll()
+	if err != nil {
+		return nil, fmt.Errorf("cannot fetch user from the database: %w", err)
+	}
+
+	res := make([]models.User, len(docs))
+	for i, doc := range docs {
+		err = doc.DataTo(&res[i])
+		if err != nil {
+			return nil, fmt.Errorf("cannot parse user: %w", err)
+		}
+	}
+	return res, nil
+}
+
 func GetOrCreateUser(ctx context.Context, chatId int64) (models.User, error) {
 	user, err := GetUser(ctx, chatId)
 	if err == nil {

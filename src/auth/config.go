@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/JakubC-projects/myshare-activity-telegram/src/config"
@@ -9,34 +8,15 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// Authenticator is used to authenticate our users.
-type Authenticator struct {
-	*oidc.Provider
-	oauth2.Config
-}
+var Auth = GetAuthenticator()
 
-var Auth *Authenticator
+func GetAuthenticator() *oauth2.Config {
 
-func init() {
-	a, err := GetAuthenticator()
-	if err != nil {
-		panic(err)
-	}
-	Auth = a
-}
-
-// New instantiates the *Authenticator.
-func GetAuthenticator() (*Authenticator, error) {
-	provider, err := oidc.NewProvider(
-		context.Background(),
-		"https://"+config.Get().Oauth.Domain+"/",
-	)
-	if err != nil {
-		return nil, err
+	endpoints := oauth2.Endpoint{
+		AuthURL:  fmt.Sprintf("https://%s/oauth/authorize?audience=%s", config.Get().Oauth.Domain, config.Get().MyshareAPI.Audience),
+		TokenURL: fmt.Sprintf("https://%s/oauth/token", config.Get().Oauth.Domain),
 	}
 
-	endpoints := provider.Endpoint()
-	endpoints.AuthURL += "?audience=" + config.Get().MyshareAPI.Audience
 	conf := oauth2.Config{
 		ClientID:     config.Get().Oauth.ClientID,
 		ClientSecret: config.Get().Oauth.ClientSecret,
@@ -45,8 +25,5 @@ func GetAuthenticator() (*Authenticator, error) {
 		Scopes:       []string{oidc.ScopeOpenID, "profile", "offline_access"},
 	}
 
-	return &Authenticator{
-		Provider: provider,
-		Config:   conf,
-	}, nil
+	return &conf
 }

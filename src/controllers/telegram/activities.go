@@ -28,7 +28,7 @@ func showActivities(ctx context.Context, u models.User, pagePayload string) erro
 	return err
 }
 
-func showActivity(ctx context.Context, u models.User, activityIdString string) error {
+func ShowActivity(ctx context.Context, u models.User, activityIdString string) error {
 	activityId, err := strconv.Atoi(activityIdString)
 	if err != nil {
 		return fmt.Errorf("invalid activity id %s: %w", activityIdString, err)

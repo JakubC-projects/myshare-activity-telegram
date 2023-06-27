@@ -11,9 +11,11 @@ import (
 )
 
 const userCollectionName = "users"
+const activitiesCollectionName = "activities"
 
 var Db *firestore.Client
 var Users *firestore.CollectionRef
+var Activities *firestore.CollectionRef
 
 func init() {
 	ctx := context.Background()
@@ -29,4 +31,5 @@ func init() {
 	}
 	Db = client
 	Users = Db.Collection(userCollectionName)
+	Activities = Db.Collection(activitiesCollectionName)
 }

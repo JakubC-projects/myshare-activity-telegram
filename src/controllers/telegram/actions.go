@@ -23,7 +23,7 @@ func handleUserAction(ctx context.Context, user models.User, u tgbotapi.Update) 
 		case models.CommandShowActivities:
 			return showActivities(ctx, user, payload)
 		case models.CommandShowActivity:
-			return showActivity(ctx, user, payload)
+			return ShowActivity(ctx, user, payload)
 		case models.CommandShowParticipants:
 			return showParticipants(ctx, user, payload)
 		case models.CommandRegisterActivity:
@@ -34,6 +34,10 @@ func handleUserAction(ctx context.Context, user models.User, u tgbotapi.Update) 
 			return showStatus(ctx, user)
 		case models.CommandShowMenu:
 			return showMenu(ctx, user)
+		case models.CommandEnableNotifications:
+			return setNotificationSettings(ctx, user, true)
+		case models.CommandDisableNotifications:
+			return setNotificationSettings(ctx, user, false)
 		case models.CommandLogout:
 			return logoutUser(ctx, user)
 		}

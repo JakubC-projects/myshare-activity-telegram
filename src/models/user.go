@@ -3,10 +3,15 @@ package models
 import "golang.org/x/oauth2"
 
 type User struct {
-	ChatId        int64
-	Token         *oauth2.Token
-	DisplayName   string
-	PersonID      int
-	Org           *Org
-	LastMessageId int
+	ChatId                int64
+	Token                 *oauth2.Token
+	DisplayName           string
+	PersonID              int
+	Org                   *Org
+	NotificationsSettings NotificationsSettings
+	LastMessageId         int
+}
+
+type NotificationsSettings struct {
+	Enabled bool
 }
