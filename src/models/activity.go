@@ -1,11 +1,10 @@
 package models
 
 import (
-	"fmt"
 	"time"
 )
 
-type Activity struct {
+type MyshareActivity struct {
 	ActivityId       int         `json:"activityId"`
 	ActivityLocation string      `json:"activityLocation"`
 	Start            MyshareTime `json:"start"`
@@ -23,6 +22,18 @@ type Activity struct {
 	Responsible ActivityResponsible `json:"responsible"`
 }
 
+type ContributionsActivity struct {
+	Id     int `json:"id"`
+	TeamId int `json:"teamID"`
+
+	Name        string `json:"name"`
+	Description string `json:"description"`
+
+	Start   MyshareTime `json:"start"`
+	Finish  MyshareTime `json:"finish"`
+	Created MyshareTime `json:"created"`
+}
+
 type RegistrationStatus int
 
 const (
@@ -37,7 +48,6 @@ type ActivityResponsible struct {
 type MyshareTime time.Time
 
 func (m *MyshareTime) UnmarshalText(data []byte) error {
-	fmt.Printf("parse time: %s\n", data)
 	t, err := time.Parse(time.RFC3339, string(data))
 	if err == nil {
 		*m = MyshareTime(t)
@@ -52,6 +62,9 @@ func (m *MyshareTime) UnmarshalText(data []byte) error {
 	return err
 }
 
+func (m MyshareTime) MarshalText() ([]byte, error) {
+	return time.Time(m).MarshalText()
+}
 func (m MyshareTime) Format(f string) string {
 	return time.Time(m).Format(f)
 }

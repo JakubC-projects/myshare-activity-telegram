@@ -23,4 +23,8 @@ type Config struct {
 		BaseUrl2 string `envconfig:"MYSHARE_BASE_URL2"`
 		Audience string `envconfig:"MYSHARE_AUDIENCE"`
 	}
+	ContributionsAPI struct {
+		BaseUrl  string `envconfig:"CONTRIBUTIONS_BASE_URL"`
+		Audience string `envconfig:"CONTRIBUTIONS_AUDIENCE"`
+	}
 }

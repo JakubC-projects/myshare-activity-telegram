@@ -7,6 +7,8 @@ import (
 
 	"github.com/JakubC-projects/myshare-activity-telegram/src/config"
 	"github.com/JakubC-projects/myshare-activity-telegram/src/controllers/auth"
+	checkactivites "github.com/JakubC-projects/myshare-activity-telegram/src/controllers/check_activities"
+	"github.com/JakubC-projects/myshare-activity-telegram/src/controllers/notify"
 	"github.com/JakubC-projects/myshare-activity-telegram/src/controllers/telegram"
 	"github.com/JakubC-projects/myshare-activity-telegram/src/log"
 	"github.com/JakubC-projects/myshare-activity-telegram/src/webhook"
@@ -17,7 +19,8 @@ func main() {
 	r := gin.New()
 
 	r.POST("/telegram-update", telegram.TelegramUpdateHttpHandler)
-
+	r.POST("/check-activities", checkactivites.CheckActivitiesHandler)
+	r.POST("/notify", notify.NotifyUsersHandler)
 	auth.AddRoutes(r)
 
 	if _, found := os.LookupEnv("NGROK_AUTHTOKEN"); found {

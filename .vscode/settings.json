@@ -1,6 +1,15 @@
 {
     "cSpell.words": [
+        "apim2m",
+        "AUTHTOKEN",
+        "bluemonday",
         "firestore",
-        "MYSHARE"
-    ]
+        "gonic",
+        "Jakub",
+        "MYSHARE",
+        "NGROK",
+        "samber",
+        "tgbotapi"
+    ],
+    "go.testEnvFile": "${workspaceFolder}/.env",
 }

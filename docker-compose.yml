@@ -20,7 +20,6 @@ services:
       FIRESTORE_EMULATOR_HOST: firebase:8080
 
   firebase:
-    container_name: firebase
     image: spine3/firebase-emulator
     ports:
       - "4000:4000"

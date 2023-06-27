@@ -9,7 +9,7 @@ import (
 )
 
 func getTokenSilently(ctx context.Context, u models.User) (*oauth2.Token, error) {
-	auth, _ := auth.GetAuthenticator()
+	auth := auth.GetAuthenticator()
 	refresher := auth.TokenSource(ctx, u.Token)
 	return refresher.Token()
 }
