@@ -18,8 +18,8 @@ import (
 )
 
 type notifyParams struct {
-	PersonID int `query:"personId"`
-	TeamId   int `query:"teamId"`
+	PersonID int `form:"personId"`
+	TeamId   int `form:"teamId"`
 }
 
 type notification struct {
@@ -44,13 +44,14 @@ func NotifyUsersHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
+	fmt.Printf(" %+v\n", np)
+
 	err = json.NewDecoder(c.Request.Body).Decode(&n)
 	if err != nil {
 		err = fmt.Errorf("invalid body: %w", err)
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	fmt.Printf(" %+v", *n.KeyboardMarkup)
 	if err := handleNotifyUsers(c.Request.Context(), n, np); err != nil {
 		err = fmt.Errorf("cannot notify users: %w", err)
 		log.L.Err(err).Msg(err.Error())
