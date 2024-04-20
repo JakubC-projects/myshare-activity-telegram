@@ -25,7 +25,7 @@ func main() {
 	auth.AddRoutes(r)
 
 	if config.Ngrok.AuthToken != "" {
-		tun, err := webhook.SetupWebhook(config.Ngrok.AuthToken, config.Ngrok.Domain)
+		tun, err := webhook.SetupWebhook(config.Ngrok.AuthToken)
 		if err != nil {
 			log.L.Fatal().AnErr("err", err).Send()
 		}

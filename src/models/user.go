@@ -14,6 +14,3 @@ type User struct {
 type NotificationsSettings struct {
 	Enabled bool
 }
-
-type PeacefulRoadSettings struct {
-}
