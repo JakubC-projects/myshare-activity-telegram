@@ -16,13 +16,13 @@ func SendMenuMessage(user models.User, editedMessageId int) (tgbotapi.Message, e
 			{{Text: "Change org", CallbackData: &models.CommandStartChangeOrg}},
 		},
 	}
-	if user.NotificationsSettings.Enabled {
-		buttons.InlineKeyboard = append(buttons.InlineKeyboard,
-			[]tgbotapi.InlineKeyboardButton{{Text: "Disable notifications", CallbackData: &models.CommandDisableNotifications}})
-	} else {
-		buttons.InlineKeyboard = append(buttons.InlineKeyboard,
-			[]tgbotapi.InlineKeyboardButton{{Text: "Enable notifications", CallbackData: &models.CommandEnableNotifications}})
-	}
+	// if user.NotificationsSettings.Enabled {
+	// 	buttons.InlineKeyboard = append(buttons.InlineKeyboard,
+	// 		[]tgbotapi.InlineKeyboardButton{{Text: "Disable notifications", CallbackData: &models.CommandDisableNotifications}})
+	// } else {
+	// 	buttons.InlineKeyboard = append(buttons.InlineKeyboard,
+	// 		[]tgbotapi.InlineKeyboardButton{{Text: "Enable notifications", CallbackData: &models.CommandEnableNotifications}})
+	// }
 
 	buttons.InlineKeyboard = append(buttons.InlineKeyboard,
 		[]tgbotapi.InlineKeyboardButton{{Text: "Logout", CallbackData: &models.CommandLogout}})
