@@ -1,6 +1,0 @@
-[build]
-  bin = "./tmp/main"
-  cmd = "go generate ./... && go build -gcflags='all=-N -l'  -o ./tmp/main ./src/main.go"
-  include_dir = ["src"]
-  exclude_regex = ["_enum\\.go", "_test\\.go"]
-  delay = 50
