@@ -27,5 +27,6 @@ type Config struct {
 	}
 	Ngrok struct {
 		AuthToken string `envconfig:"NGROK_AUTHTOKEN"`
+		Domain    string `envconfig:"NGROK_DOMAIN"`
 	}
 }
