@@ -25,21 +25,26 @@ func callbackHandler(c *gin.Context) {
 	token, err := getCallbackToken(c)
 	if err != nil {
 		c.String(http.StatusUnauthorized, err.Error())
+		return
 	}
 
 	user, err := getCallbackUser(c)
 	if err != nil {
 		c.String(http.StatusUnauthorized, err.Error())
+		return
 	}
 
 	loggedInUser, err := updateUser(ctx, user, token)
 	if err != nil {
 		c.String(http.StatusUnauthorized, err.Error())
+		return
+
 	}
 
 	orgs, err := api.GetOrgs(ctx, loggedInUser)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	telegram.SendLoggedInMessage(loggedInUser, orgs)
