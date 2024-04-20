@@ -8,8 +8,8 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func SendShowStatusMessage(user models.User, status models.Status, opts ...Option) (tgbotapi.Message, error) {
-	text := fmt.Sprintf("My status\n%.2f%%\n%.2f / %.2f %s",
+func SendShowStatusMessage(user models.User, status models.Status, editedMessageId int) (tgbotapi.Message, error) {
+	text := fmt.Sprintf("<b>My Status</b>\n%.2f%%\n%.2f / %.2f %s",
 		status.PercentageValue,
 		status.TransactionsAmount,
 		status.Target,
@@ -23,5 +23,5 @@ func SendShowStatusMessage(user models.User, status models.Status, opts ...Optio
 				{Text: "Refresh", CallbackData: &models.CommandShowStatus}},
 		}}
 
-	return SendMessage(user, text, &buttons, opts...)
+	return SendMessage(user, text, &buttons, editedMessageId)
 }

@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "start_firebase",
+            "command": "${workspaceFolder}/scripts/start-firebase.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "start_server",
+            "command": "${workspaceFolder}/scripts/start-server.sh",
+            "problemMatcher": []
+        },
+    ]
+}

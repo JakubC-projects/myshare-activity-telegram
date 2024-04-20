@@ -45,7 +45,7 @@ func logoutHandler(c *gin.Context) {
 		return
 	}
 
-	telegram.SendWelcomeMessage(u)
+	telegram.SendWelcomeMessage(u, 0)
 
 	c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("https://t.me/%s", config.Get().Telegram.BotName))
 }

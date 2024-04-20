@@ -13,7 +13,7 @@ import (
 
 const pageSize = 10
 
-func SendShowActivitiesMessage(user models.User, activities []models.MyshareActivity, page int, opts ...Option) (tgbotapi.Message, error) {
+func SendShowActivitiesMessage(user models.User, activities []models.MyshareActivity, page int, editedMessageId int) (tgbotapi.Message, error) {
 	text := "<b>Available activities</b>:\n"
 	if len(activities) > pageSize {
 		text += fmt.Sprintf("<b>Page</b>: %d / %d\n", page+1, len(activities)/pageSize+1)
@@ -95,12 +95,12 @@ func SendShowActivitiesMessage(user models.User, activities []models.MyshareActi
 	buttons := tgbotapi.InlineKeyboardMarkup{
 		InlineKeyboard: inlineKeyboard,
 	}
-	return SendMessage(user, text, &buttons, opts...)
+	return SendMessage(user, text, &buttons, editedMessageId)
 }
 
 var sanitizeHtml = bluemonday.StripTagsPolicy()
 
-func SendShowActivityMessage(user models.User, activity models.MyshareActivity, opts ...Option) (tgbotapi.Message, error) {
+func SendShowActivityMessage(user models.User, activity models.MyshareActivity, editedMessageId int) (tgbotapi.Message, error) {
 	text := fmt.Sprintf("<b>%s</b>\n\n", activity.Name)
 	text += fmt.Sprintf("📅 %s -> %s\n\n",
 		activity.Start.Format("02 Jan"),
@@ -149,10 +149,10 @@ func SendShowActivityMessage(user models.User, activity models.MyshareActivity, 
 
 	buttons := tgbotapi.InlineKeyboardMarkup{InlineKeyboard: inlineButtons}
 
-	return SendMessage(user, text, &buttons, opts...)
+	return SendMessage(user, text, &buttons, editedMessageId)
 }
 
-func SendShowShowParticipantsMessage(user models.User, activity models.MyshareActivity, participants []models.Participant, opts ...Option) (tgbotapi.Message, error) {
+func SendShowShowParticipantsMessage(user models.User, activity models.MyshareActivity, participants []models.Participant, editedMessageId int) (tgbotapi.Message, error) {
 	text := fmt.Sprintf("<b>%s</b>\n", activity.Name)
 	text += fmt.Sprintf("👥 %d / %d\n", activity.Registrations, activity.NeededRegistrations)
 	text += "\n"
@@ -177,11 +177,11 @@ func SendShowShowParticipantsMessage(user models.User, activity models.MyshareAc
 		},
 	}
 
-	return SendMessage(user, text, &buttons, opts...)
+	return SendMessage(user, text, &buttons, editedMessageId)
 
 }
 
-func SendNewActivitiesNotificationMessage(user models.User, activities []models.MyshareActivity, opts ...Option) (tgbotapi.Message, error) {
+func SendNewActivitiesNotificationMessage(user models.User, activities []models.MyshareActivity, editedMessageId int) (tgbotapi.Message, error) {
 
 	buttons := [][]tgbotapi.InlineKeyboardButton{}
 	text := "New activities have appeared!\n\n"
@@ -202,5 +202,5 @@ func SendNewActivitiesNotificationMessage(user models.User, activities []models.
 		{Text: "Back to menu", CallbackData: &models.CommandShowMenu},
 	})
 
-	return SendMessage(user, text, &tgbotapi.InlineKeyboardMarkup{InlineKeyboard: buttons}, opts...)
+	return SendMessage(user, text, &tgbotapi.InlineKeyboardMarkup{InlineKeyboard: buttons}, editedMessageId)
 }
