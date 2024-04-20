@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/JakubC-projects/myshare-activity-telegram/src/config"
 	"github.com/JakubC-projects/myshare-activity-telegram/src/controllers/auth"
@@ -16,6 +15,8 @@ import (
 )
 
 func main() {
+	config := config.Get()
+
 	r := gin.New()
 
 	r.POST("/telegram-update", telegram.TelegramUpdateHttpHandler)
@@ -23,21 +24,13 @@ func main() {
 	r.POST("/notify", notify.NotifyUsersHandler)
 	auth.AddRoutes(r)
 
-	if _, found := os.LookupEnv("NGROK_AUTHTOKEN"); found {
-		tun, err := webhook.SetupWebhook()
+	if config.Ngrok.AuthToken != "" {
+		tun, err := webhook.SetupWebhook(config.Ngrok.AuthToken, config.Ngrok.Domain)
 		if err != nil {
 			log.L.Fatal().AnErr("err", err).Send()
 		}
-		go http.Serve(tun, r)
-	}
-
-	if config.Get().Server.CertFile != "" {
-		err := r.RunTLS(fmt.Sprintf(":%d", config.Get().Server.Port), config.Get().Server.CertFile, config.Get().Server.CertKeyFile)
-		if err != nil {
-			log.L.Fatal().AnErr("err", err).Send()
-		}
+		http.Serve(tun, r)
 	} else {
-		r.Run(fmt.Sprintf(":%d", config.Get().Server.Port))
+		r.Run(fmt.Sprintf(":%d", config.Server.Port))
 	}
-
 }

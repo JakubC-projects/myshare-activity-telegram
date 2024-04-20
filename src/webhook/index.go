@@ -10,10 +10,10 @@ import (
 	"golang.ngrok.com/ngrok/config"
 )
 
-func SetupWebhook() (ngrok.Tunnel, error) {
+func SetupWebhook(token, domain string) (ngrok.Tunnel, error) {
 	tun, err := ngrok.Listen(context.Background(),
-		config.HTTPEndpoint(),
-		ngrok.WithAuthtokenFromEnv(),
+		config.HTTPEndpoint(config.WithDomain(domain)),
+		ngrok.WithAuthtoken(token),
 	)
 
 	if err != nil {

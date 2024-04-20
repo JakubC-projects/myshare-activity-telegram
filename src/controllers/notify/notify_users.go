@@ -84,14 +84,9 @@ func handleNotifyUsers(ctx context.Context, n notification, np notifyParams) err
 
 func sendNotificationToUser(ctx context.Context, u models.User, n notification) error {
 
-	msg, err := telegram.SendMessage(u, n.Text, n.KeyboardMarkup)
+	_, err := telegram.SendMessage(u, n.Text, n.KeyboardMarkup, 0)
 	if err != nil {
 		return fmt.Errorf("cannot send message: %w", err)
-	}
-	u.LastMessageId = msg.MessageID
-	err = db.SaveUser(ctx, u)
-	if err != nil {
-		return fmt.Errorf("cannot save user: %w", err)
 	}
 	return nil
 }

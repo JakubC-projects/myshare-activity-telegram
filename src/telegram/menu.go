@@ -7,7 +7,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func SendMenuMessage(user models.User, opts ...Option) (tgbotapi.Message, error) {
+func SendMenuMessage(user models.User, editedMessageId int) (tgbotapi.Message, error) {
 	text := fmt.Sprintf("<b>Logged in as</b>: %s\n<b>Selected org:</b> %s\n<b>Choose your action:</b>", user.DisplayName, user.Org.Name)
 	buttons := tgbotapi.InlineKeyboardMarkup{
 		InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{
@@ -27,6 +27,6 @@ func SendMenuMessage(user models.User, opts ...Option) (tgbotapi.Message, error)
 	buttons.InlineKeyboard = append(buttons.InlineKeyboard,
 		[]tgbotapi.InlineKeyboardButton{{Text: "Logout", CallbackData: &models.CommandLogout}})
 
-	return SendMessage(user, text, &buttons, opts...)
+	return SendMessage(user, text, &buttons, editedMessageId)
 
 }

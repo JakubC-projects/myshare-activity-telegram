@@ -2,11 +2,9 @@ package config
 
 type Config struct {
 	Server struct {
-		Port        int    `envconfig:"PORT"`
-		Host        string `envconfig:"SERVER_HOST"`
-		GcpProject  string `envconfig:"GCP_PROJECT"`
-		CertFile    string `envconfig:"CERT_FILE"`
-		CertKeyFile string `envconfig:"CERT_KEY_FILE"`
+		Port       int    `envconfig:"PORT"`
+		Host       string `envconfig:"SERVER_HOST"`
+		GcpProject string `envconfig:"GCP_PROJECT"`
 	}
 	Telegram struct {
 		ApiKey  string `envconfig:"TELEGRAM_API_KEY"`
@@ -26,5 +24,9 @@ type Config struct {
 	ContributionsAPI struct {
 		BaseUrl  string `envconfig:"CONTRIBUTIONS_BASE_URL"`
 		Audience string `envconfig:"CONTRIBUTIONS_AUDIENCE"`
+	}
+	Ngrok struct {
+		AuthToken string `envconfig:"NGROK_AUTHTOKEN"`
+		Domain    string `envconfig:"NGROK_DOMAIN"`
 	}
 }

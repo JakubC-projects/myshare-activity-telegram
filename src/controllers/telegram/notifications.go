@@ -9,13 +9,13 @@ import (
 	"github.com/JakubC-projects/myshare-activity-telegram/src/telegram"
 )
 
-func setNotificationSettings(ctx context.Context, u models.User, enabled bool) error {
+func setNotificationSettings(ctx context.Context, u models.User, enabled bool, editedMessageId int) error {
 	u.NotificationsSettings.Enabled = enabled
 	err := db.SaveUser(ctx, u)
 	if err != nil {
 		return fmt.Errorf("cannot save user: %w", err)
 
 	}
-	_, err = telegram.SendMenuMessage(u, telegram.Edit)
+	_, err = telegram.SendMenuMessage(u, editedMessageId)
 	return err
 }

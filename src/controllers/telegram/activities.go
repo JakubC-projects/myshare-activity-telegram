@@ -10,7 +10,7 @@ import (
 	"github.com/JakubC-projects/myshare-activity-telegram/src/telegram"
 )
 
-func showActivities(ctx context.Context, u models.User, pagePayload string) error {
+func showActivities(ctx context.Context, u models.User, pagePayload string, editedMessageId int) error {
 	page := 0
 	if pagePayload != "" {
 		var err error
@@ -24,11 +24,11 @@ func showActivities(ctx context.Context, u models.User, pagePayload string) erro
 	if err != nil {
 		return fmt.Errorf("cannot get activities :%w", err)
 	}
-	_, err = telegram.SendShowActivitiesMessage(u, availableActivities, page, telegram.Edit)
+	_, err = telegram.SendShowActivitiesMessage(u, availableActivities, page, editedMessageId)
 	return err
 }
 
-func ShowActivity(ctx context.Context, u models.User, activityIdString string) error {
+func ShowActivity(ctx context.Context, u models.User, activityIdString string, editedMessageId int) error {
 	activityId, err := strconv.Atoi(activityIdString)
 	if err != nil {
 		return fmt.Errorf("invalid activity id %s: %w", activityIdString, err)
@@ -37,11 +37,11 @@ func ShowActivity(ctx context.Context, u models.User, activityIdString string) e
 	if err != nil {
 		return fmt.Errorf("cannot get activity :%w", err)
 	}
-	_, err = telegram.SendShowActivityMessage(u, activity, telegram.Edit)
+	_, err = telegram.SendShowActivityMessage(u, activity, editedMessageId)
 	return err
 }
 
-func showParticipants(ctx context.Context, u models.User, activityIdString string) error {
+func showParticipants(ctx context.Context, u models.User, activityIdString string, editedMessageId int) error {
 	activityId, err := strconv.Atoi(activityIdString)
 	if err != nil {
 		return fmt.Errorf("invalid activity id %s: %w", activityIdString, err)
@@ -54,12 +54,12 @@ func showParticipants(ctx context.Context, u models.User, activityIdString strin
 	if err != nil {
 		return fmt.Errorf("cannot get participants :%w", err)
 	}
-	_, err = telegram.SendShowShowParticipantsMessage(u, activity, participants, telegram.Edit)
+	_, err = telegram.SendShowShowParticipantsMessage(u, activity, participants, editedMessageId)
 
 	return err
 }
 
-func registerActivity(ctx context.Context, u models.User, activityIdString string) error {
+func registerActivity(ctx context.Context, u models.User, activityIdString string, editedMessageId int) error {
 	activityId, err := strconv.Atoi(activityIdString)
 	if err != nil {
 		return fmt.Errorf("invalid activity id %s: %w", activityIdString, err)
@@ -79,12 +79,12 @@ func registerActivity(ctx context.Context, u models.User, activityIdString strin
 	if err != nil {
 		return fmt.Errorf("cannot get activity :%w", err)
 	}
-	_, err = telegram.SendShowActivityMessage(u, activity, telegram.Edit)
+	_, err = telegram.SendShowActivityMessage(u, activity, editedMessageId)
 
 	return err
 }
 
-func unregisterActivity(ctx context.Context, u models.User, activityIdString string) error {
+func unregisterActivity(ctx context.Context, u models.User, activityIdString string, editedMessageId int) error {
 	activityId, err := strconv.Atoi(activityIdString)
 	if err != nil {
 		return fmt.Errorf("invalid activity id %s: %w", activityIdString, err)
@@ -109,7 +109,7 @@ func unregisterActivity(ctx context.Context, u models.User, activityIdString str
 	if err != nil {
 		return fmt.Errorf("cannot get activity :%w", err)
 	}
-	_, err = telegram.SendShowActivityMessage(u, activity, telegram.Edit)
+	_, err = telegram.SendShowActivityMessage(u, activity, editedMessageId)
 
 	return err
 }

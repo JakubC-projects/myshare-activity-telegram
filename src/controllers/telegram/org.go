@@ -12,16 +12,16 @@ import (
 	"github.com/samber/lo"
 )
 
-func startChangeOrg(ctx context.Context, u models.User) error {
+func startChangeOrg(ctx context.Context, u models.User, editedMessageId int) error {
 	userOrgs, err := api.GetOrgs(ctx, u)
 	if err != nil {
 		return fmt.Errorf("cannot get orgs :%w", err)
 	}
-	_, err = telegram.SendChangeOrgMessage(u, userOrgs, telegram.Edit)
+	_, err = telegram.SendChangeOrgMessage(u, userOrgs, editedMessageId)
 	return err
 }
 
-func changeOrg(ctx context.Context, u models.User, orgIdString string) error {
+func changeOrg(ctx context.Context, u models.User, orgIdString string, editedMessageId int) error {
 	orgId, err := strconv.Atoi(orgIdString)
 	if err != nil {
 		return fmt.Errorf("invalid org id %s: %w", orgIdString, err)
@@ -43,7 +43,7 @@ func changeOrg(ctx context.Context, u models.User, orgIdString string) error {
 		return fmt.Errorf("cannot save user: %w", err)
 
 	}
-	_, err = telegram.SendMenuMessage(u, telegram.Edit)
+	_, err = telegram.SendMenuMessage(u, editedMessageId)
 	if err != nil {
 		return fmt.Errorf("cannot send menu message: %w", err)
 	}

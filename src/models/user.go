@@ -9,9 +9,11 @@ type User struct {
 	PersonID              int
 	Org                   *Org
 	NotificationsSettings NotificationsSettings
-	LastMessageId         int
 }
 
 type NotificationsSettings struct {
 	Enabled bool
+}
+
+type PeacefulRoadSettings struct {
 }

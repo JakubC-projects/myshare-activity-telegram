@@ -103,8 +103,6 @@ func notifyUserOfActivities(ctx context.Context, u models.User, newActivities []
 			return na.Id == ua.ActivityId
 		})
 	})
-	msg, err := telegram.SendNewActivitiesNotificationMessage(u, newActivitiesForUser)
-	u.LastMessageId = msg.MessageID
-	db.SaveUser(ctx, u)
+	_, err = telegram.SendNewActivitiesNotificationMessage(u, newActivitiesForUser, 0)
 	return err
 }

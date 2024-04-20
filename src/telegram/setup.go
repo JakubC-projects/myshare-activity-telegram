@@ -9,7 +9,7 @@ import (
 	"github.com/samber/lo"
 )
 
-func SendWelcomeMessage(user models.User, opts ...Option) (tgbotapi.Message, error) {
+func SendWelcomeMessage(user models.User, editedMessageId int) (tgbotapi.Message, error) {
 	text := "Welcome to the unofficial MyShare bot\nTo start you need to login below"
 
 	loginUrl := fmt.Sprintf("%s/login?chatId=%d", config.Get().Server.Host, user.ChatId)
@@ -19,10 +19,10 @@ func SendWelcomeMessage(user models.User, opts ...Option) (tgbotapi.Message, err
 		},
 	}
 
-	return SendMessage(user, text, &buttons, opts...)
+	return SendMessage(user, text, &buttons, editedMessageId)
 }
 
-func SendLoggedInMessage(user models.User, orgs []models.Org, opts ...Option) (tgbotapi.Message, error) {
+func SendLoggedInMessage(user models.User, orgs []models.Org) (tgbotapi.Message, error) {
 	text := fmt.Sprintf("<b>Successfully logged in:</b> as %s\n<b>Select your org:</b>", user.DisplayName)
 	buttons := tgbotapi.InlineKeyboardMarkup{
 		InlineKeyboard: lo.Map(orgs, func(t models.Org, _ int) []tgbotapi.InlineKeyboardButton {
@@ -31,10 +31,10 @@ func SendLoggedInMessage(user models.User, orgs []models.Org, opts ...Option) (t
 		}),
 	}
 
-	return SendMessage(user, text, &buttons, opts...)
+	return SendMessage(user, text, &buttons, 0)
 }
 
-func SendChangeOrgMessage(user models.User, orgs []models.Org, opts ...Option) (tgbotapi.Message, error) {
+func SendChangeOrgMessage(user models.User, orgs []models.Org, editedMessageId int) (tgbotapi.Message, error) {
 	text := "<b>Change your org:</b>"
 	buttons := tgbotapi.InlineKeyboardMarkup{
 		InlineKeyboard: lo.Map(orgs, func(t models.Org, _ int) []tgbotapi.InlineKeyboardButton {
@@ -44,5 +44,5 @@ func SendChangeOrgMessage(user models.User, orgs []models.Org, opts ...Option) (
 	}
 	buttons.InlineKeyboard = append(buttons.InlineKeyboard, []tgbotapi.InlineKeyboardButton{{Text: "Go back", CallbackData: &models.CommandShowMenu}})
 
-	return SendMessage(user, text, &buttons, opts...)
+	return SendMessage(user, text, &buttons, editedMessageId)
 }

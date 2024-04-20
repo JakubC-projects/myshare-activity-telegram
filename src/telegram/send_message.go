@@ -3,33 +3,14 @@ package telegram
 import (
 	"github.com/JakubC-projects/myshare-activity-telegram/src/models"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/samber/lo"
 )
 
-type Option interface {
-	IsOption()
-}
-
-type editMessage struct{}
-
-func (editMessage) IsOption() {}
-
-var Edit = editMessage{}
-
-func isEdit(opts []Option) bool {
-	_, foundEdit := lo.Find(opts, func(p Option) bool {
-		_, ok := p.(editMessage)
-		return ok
-	})
-	return foundEdit
-}
-
-func SendMessage(user models.User, text string, replyMarkup *tgbotapi.InlineKeyboardMarkup, opts ...Option) (tgbotapi.Message, error) {
-	if isEdit(opts) {
+func SendMessage(user models.User, text string, replyMarkup *tgbotapi.InlineKeyboardMarkup, editedMessageId int) (tgbotapi.Message, error) {
+	if editedMessageId != 0 {
 		msg := tgbotapi.EditMessageTextConfig{
 			BaseEdit: tgbotapi.BaseEdit{
 				ChatID:      user.ChatId,
-				MessageID:   user.LastMessageId,
+				MessageID:   editedMessageId,
 				ReplyMarkup: replyMarkup,
 			},
 			Text:      text,
@@ -46,4 +27,8 @@ func SendMessage(user models.User, text string, replyMarkup *tgbotapi.InlineKeyb
 		Text:      text,
 		ParseMode: tgbotapi.ModeHTML,
 	})
+}
+
+func DeleteMessage(user models.User, messageId int) (tgbotapi.Message, error) {
+	return Bot.Send(tgbotapi.NewDeleteMessage(user.ChatId, messageId))
 }
