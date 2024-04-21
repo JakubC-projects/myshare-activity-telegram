@@ -32,7 +32,7 @@ func SendShowStatusMessage(user models.User, status models.Status, editedMessage
 }
 
 var peacefulRoadStartTime = lo.Must(time.Parse(time.RFC3339, "2024-03-06T00:00:00Z"))
-var peacefulRoadEndTime = lo.Must(time.Parse(time.RFC3339, "2024-07-11T23:59:59Z"))
+var peacefulRoadEndTime = lo.Must(time.Parse(time.RFC3339, "2024-07-11T00:00:00Z"))
 var peacefulRoadStartPercentage = 35.0
 var peacefulRoadEndPercentage = 70.0
 
@@ -42,10 +42,7 @@ func getPeacefulRoadStatus(status models.Status) string {
 		return ""
 	}
 
-	actionDuration := float64(peacefulRoadEndTime.Sub(peacefulRoadStartTime))
-	elapsedDuration := float64(now.Truncate(time.Hour * 24).Sub(peacefulRoadStartTime))
-
-	percentForNow := elapsedDuration/actionDuration*(peacefulRoadEndPercentage-peacefulRoadStartPercentage) + peacefulRoadStartPercentage
+	percentForNow := getPeacefulRoadPercentForDate(now)
 
 	var statusMessage string
 	if status.PercentageValue > percentForNow {
@@ -61,4 +58,13 @@ Status for Today: %.2f%%
 %s`,
 		percentForNow,
 		statusMessage)
+}
+
+func getPeacefulRoadPercentForDate(date time.Time) float64 {
+	actionDuration := float64(peacefulRoadEndTime.Sub(peacefulRoadStartTime))
+	elapsedDuration := float64(date.Truncate(time.Hour * 24).Sub(peacefulRoadStartTime))
+
+	percent := elapsedDuration/actionDuration*(peacefulRoadEndPercentage-peacefulRoadStartPercentage) + peacefulRoadStartPercentage
+
+	return percent
 }
