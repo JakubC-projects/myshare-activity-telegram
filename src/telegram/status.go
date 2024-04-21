@@ -31,7 +31,7 @@ func SendShowStatusMessage(user models.User, status models.Status, editedMessage
 	return SendMessage(user, text, &buttons, editedMessageId)
 }
 
-var peacefulRoadStartTime = lo.Must(time.Parse(time.RFC3339, "2024-03-07T00:00:00Z"))
+var peacefulRoadStartTime = lo.Must(time.Parse(time.RFC3339, "2024-03-06T00:00:00Z"))
 var peacefulRoadEndTime = lo.Must(time.Parse(time.RFC3339, "2024-07-11T23:59:59Z"))
 var peacefulRoadStartPercentage = 35.0
 var peacefulRoadEndPercentage = 70.0
